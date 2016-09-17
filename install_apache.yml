@@ -1,0 +1,38 @@
+---
+
+- hosts: webserver
+  remote_user: ubuntu
+  sudo: yes
+
+
+  tasks:
+
+
+
+    - name: install apache2
+
+      apt: name=apache2 update_cache=yes state=latest
+
+
+
+    - name: enabled mod_rewrite
+
+      apache2_module: name=rewrite state=present
+
+      notify:
+
+        - restart apache2
+
+    - name: replace default index.html file
+
+      copy: src=/home/asaxena/index.html dest=/var/www/html/ mode=0644
+
+
+  
+  handlers:
+    - name: restart apache2
+      service: name=apache2 state=restarted
+
+
+
+  
